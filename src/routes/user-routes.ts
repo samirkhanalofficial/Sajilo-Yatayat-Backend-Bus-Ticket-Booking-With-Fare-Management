@@ -23,11 +23,11 @@ userRouter.post("/create", async (req: AuthUserRequest, res: Response) => {
     return res.status(400).json({ message: error });
   }
 });
-userRouter.get("/:mobile", async (req: Request, res: Response) => {
+userRouter.get("/mydetails", async (req: AuthUserRequest, res: Response) => {
   try {
-    const mobile = req.params.mobile ?? "";
+    // const mobile = req.params.mobile ?? "";
 
-    const user = await userRepository.getUserByPhone(mobile);
+    const user = await userRepository.getUserByPhone(req.user.phone_number);
     // console.log(user);
     if (!user) throw "User does not exists.";
     return res.status(200).json(user);
