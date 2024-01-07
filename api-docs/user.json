@@ -1,0 +1,52 @@
+{
+	"info": {
+		"_postman_id": "e2507a7a-09f4-4fd6-9363-c55681e0192f",
+		"name": "user",
+		"description": "This api wil let you create user , view his details and update his details. Note: you must pass Firebase_Access_Token as Authorization in Headers section.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "24964174-e2507a7a-09f4-4fd6-9363-c55681e0192f"
+	},
+	"item": [
+		{
+			"name": "create",
+			"id": "c0e3d592-8f67-4803-bd05-4a3914065e4a",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Firebase_Access_Token}}",
+						"description": "this is to authorize user with firebase access token. This may expire, use fresh token every new hour.",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"samir khanal\",\n    \"gender\":\"male\",\n    \"address\":\"koteshwor-15-Kathmandu\",\n    \"dob\":\"2000-01-01\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseurl}}/user/create",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"user",
+						"create"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
