@@ -35,15 +35,15 @@ userRouter.get("/mydetails", async (req: AuthUserRequest, res: Response) => {
     return res.status(400).json({ message: error });
   }
 });
-userRouter.get("/id/:id", async (req: Request, res: Response) => {
-  try {
-    const id = req.params.id ?? "";
+// userRouter.get("/id/:id", async (req: Request, res: Response) => {
+//   try {
+//     const id = req.params.id ?? "";
 
-    const user = await userRepository.getUserById(id);
-    return res.status(200).json(user);
-  } catch (error: any) {
-    return res.status(400).json({ message: error });
-  }
-});
+//     const user = await userRepository.getUserById(id);
+//     return res.status(200).json(user);
+//   } catch (error: any) {
+//     return res.status(400).json({ message: error });
+//   }
+// });
 
 export default userRouter;

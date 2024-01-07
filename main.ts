@@ -5,9 +5,6 @@ import mongoose from "mongoose";
 import cors from "cors";
 import userRouter from "./src/routes/user-routes";
 import { authRequired } from "./src/utils/middleware/auth.middleware";
-import { productRouter } from "./src/routes/product-routes";
-import { khaltiRouter } from "./src/routes/khalti-routes";
-import requestRouter from "./src/routes/request-routes";
 dotenv.config();
 
 const port = process.env.PORT || 3000;
@@ -32,13 +29,11 @@ app.use(express.json());
 app.use("/public", express.static("public"));
 app.use(authRequired);
 app.use("/user", userRouter);
-app.use("/product", productRouter);
-app.use("/request", requestRouter);
 
 // app.get("/", (req: Request, res: Response) => {
 //   res.send("Express + TypeScript Server");
 // });
-app.use("/khalti", khaltiRouter);
+// app.use("/khalti", khaltiRouter);
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
