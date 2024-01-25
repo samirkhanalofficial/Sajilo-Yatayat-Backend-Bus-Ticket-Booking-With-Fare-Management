@@ -48,6 +48,8 @@ This project is for handeling backend service of the project. Please refer to [S
 
 **Note** : You must use your own `firebase.json` file & `khalti` credientials, change them in `.env` file
 
+Demo Deployed Url : https://sajiloyatayatbackend.samirk.com.np
+
 ### Project Maintained By
 
 - Samir Khanal
