@@ -1,5 +1,6 @@
 import { userType } from "./user.type";
-
+import { BUSFEATURES } from "../enums/bus-features.enum";
+import { BUSTYPE } from "../enums/bus-types.enum";
 export type createBusType = {
   images: string[];
   busnumber: string;
