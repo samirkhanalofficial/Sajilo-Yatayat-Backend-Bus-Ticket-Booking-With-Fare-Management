@@ -1,4 +1,4 @@
-enum BUSTYPE {
+export enum BUSTYPE {
   AC = "AC",
   DELUXE = "DELUXE",
   NORMAL = "NORMAL",

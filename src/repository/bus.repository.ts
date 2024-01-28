@@ -5,18 +5,43 @@ class BusRepository {
   constructor() {}
 
   addBus = async (bus: createBusType) => {
-    const adminData = new Bus(bus);
-    await adminData.save();
-    return adminData;
+    const busData = new Bus(bus);
+    await busData.save();
+    return busData;
   };
+
   getBusById = async (id: string) => {
     const bus = await Bus.findById(id);
     return bus;
   };
-  getBusByOwner = async (ownerId: string) => {
-    const bus = await Bus.findOne({ $in: { owners: [ownerId] } });
+  addOwnerToBus = async (busId: string, ownerId: string) => {
+    const bus = await Bus.findByIdAndUpdate(
+      busId,
+      {
+        $push: { owners: ownerId },
+      },
+      { new: true }
+    );
     return bus;
   };
+
+  removeOwnerFromBus = async (busId: string, ownerId: string) => {
+    const bus = await Bus.findByIdAndUpdate(
+      busId,
+      {
+        $pull: { owners: ownerId },
+      },
+      { new: true }
+    );
+    return bus;
+  };
+  getBusByOwner = async (ownerId: string) => {
+    const bus = await Bus.findOne({
+      $in: { owners: [ownerId] },
+    }).getPopulatedPaths();
+    return bus;
+  };
+
   getAllBus = async () => {
     const bus = await Bus.find();
     return bus;

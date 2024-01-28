@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import User from "./user.model";
 import { busType } from "../utils/types/bus.type";
+import { BUSTYPE } from "../utils/enums/bus-types.enum";
+import { BUSFEATURES } from "../utils/enums/bus-features.enum";
 
 const busSchema = new mongoose.Schema<busType>({
   images: { type: [String], required: true },

@@ -12,6 +12,7 @@ export type createBusType = {
   features: BUSFEATURES[];
 };
 export type busType = createBusType & {
+  id: string;
   owners: userType[];
   timestamp: Date;
 };

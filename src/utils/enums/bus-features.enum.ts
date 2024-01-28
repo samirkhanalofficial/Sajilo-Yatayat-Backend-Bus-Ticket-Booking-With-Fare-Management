@@ -1,4 +1,4 @@
-enum BUSFEATURES {
+export enum BUSFEATURES {
   AC = "AC",
   WIFI = "WIFI",
   TV = "TV",

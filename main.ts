@@ -1,4 +1,4 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express, NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 
 import mongoose from "mongoose";
@@ -6,7 +6,9 @@ import cors from "cors";
 import userRouter from "./src/routes/user-routes";
 import { authRequired } from "./src/utils/middleware/auth.middleware";
 dotenv.config();
-
+import initializeFirebaseApp from "./src/service/firebase";
+import busRouter from "./src/routes/bus-routes";
+initializeFirebaseApp();
 const port = process.env.PORT || 3000;
 try {
   mongoose.connect(process.env.MONGO_URL!);
@@ -16,23 +18,20 @@ try {
   console.log("mongodb connection error", err);
 }
 
-const admin = require("firebase-admin");
-
-// Initialize Firebase Admin SDK
-admin.initializeApp({
-  credential: admin.credential.cert("./firebase.json"), // Replace with your service account key
-});
-
 const app: Express = express();
 app.use(cors());
 app.use(express.json());
+
 app.use("/public", express.static("public"));
 app.use(authRequired);
 app.use("/user", userRouter);
+app.use("/bus", busRouter);
 
-// app.get("/", (req: Request, res: Response) => {
-//   res.send("Express + TypeScript Server");
-// });
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  console.log(err);
+  res.status(500).json({ message: "Something went wrong" });
+  next(err);
+});
 // app.use("/khalti", khaltiRouter);
 
 app.listen(port, () => {

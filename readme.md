@@ -22,7 +22,7 @@ This project is for handeling backend service of the project. Please refer to [S
    npm install
    ```
 
-3. Copy .env.example file as .env,
+3. Copy .env.example file as .env & modify it for your need,
 
    ```console
    cp .env.example .env
@@ -46,7 +46,7 @@ This project is for handeling backend service of the project. Please refer to [S
    npm start
    ```
 
-**Note** : You must use your own `firebase.json` file & `khalti` credientials, change them in `.env` file
+**Note** : Create your `firebase.json` file in `src/service/firebase.json` & for `khalti` credientials, change them in `.env` file
 
 Demo Deployed Url : https://sajiloyatayatbackend.samirk.com.np
 

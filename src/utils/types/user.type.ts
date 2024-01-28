@@ -6,5 +6,6 @@ export type createUserType = {
   address: string;
 };
 export type userType = createUserType & {
+  id: string;
   timestamp: Date;
 };
