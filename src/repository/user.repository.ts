@@ -1,29 +1,31 @@
 import User from "../model/user.model";
-import { createUserType } from "../utils/types/user.type";
+import { createUserType, userType } from "../utils/types/user.type";
 
 class UserRepository {
   constructor() {}
 
-  addUser = async (user: createUserType) => {
+  addUser = async (user: createUserType): Promise<userType> => {
     const adminData = new User(user);
     await adminData.save();
     return adminData;
   };
-  getUserById = async (id: string) => {
+  getUserById = async (id: string): Promise<userType | null> => {
     const user = await User.findById(id);
     return user;
   };
-  getUserByPhone = async (mobile: string) => {
+  getUserByPhone = async (mobile: string): Promise<userType> => {
     const user = await User.findOne({ mobile });
-    // console.log(user);
     return user;
   };
-  getAllUser = async () => {
+  getAllUser = async (): Promise<userType[]> => {
     const user = await User.find();
     return user;
   };
 
-  updateUserDetails = async (userId: string, user: createUserType) => {
+  updateUserDetails = async (
+    userId: string,
+    user: createUserType
+  ): Promise<userType> => {
     const updatedUser = await User.findByIdAndUpdate(userId, user, {
       new: true,
     });

@@ -1,56 +1,62 @@
 import Bus from "../model/bus.model";
-import { createBusType } from "../utils/types/bus.type";
+import { busType, createBusType } from "../utils/types/bus.type";
 
 class BusRepository {
   constructor() {}
 
-  addBus = async (bus: createBusType) => {
+  addBus = async (bus: createBusType): Promise<busType> => {
     const busData = new Bus(bus);
     await busData.save();
     return busData;
   };
 
-  getBusById = async (id: string) => {
-    const bus = await Bus.findById(id);
+  getBusById = async (id: string): Promise<busType> => {
+    const bus = await Bus.findById(id).populate("owners");
     return bus;
   };
-  addOwnerToBus = async (busId: string, ownerId: string) => {
+  addOwnerToBus = async (busId: string, ownerId: string): Promise<busType> => {
     const bus = await Bus.findByIdAndUpdate(
       busId,
       {
         $push: { owners: ownerId },
       },
       { new: true }
-    );
+    ).populate("owners");
     return bus;
   };
 
-  removeOwnerFromBus = async (busId: string, ownerId: string) => {
+  removeOwnerFromBus = async (
+    busId: string,
+    ownerId: string
+  ): Promise<busType> => {
     const bus = await Bus.findByIdAndUpdate(
       busId,
       {
         $pull: { owners: ownerId },
       },
       { new: true }
-    );
+    ).populate("owners");
     return bus;
   };
-  getBusByOwner = async (ownerId: string) => {
+  getBusByOwner = async (ownerId: string): Promise<busType> => {
     const bus = await Bus.findOne({
       $in: { owners: [ownerId] },
-    }).getPopulatedPaths();
+    }).populate("owners");
     return bus;
   };
 
-  getAllBus = async () => {
-    const bus = await Bus.find();
+  getAllBus = async (): Promise<busType[]> => {
+    const bus: busType[] = await Bus.find().populate("owners");
     return bus;
   };
 
-  updateBusDetails = async (busId: string, bus: createBusType) => {
+  updateBusDetails = async (
+    busId: string,
+    bus: createBusType
+  ): Promise<busType> => {
     const updatedBus = await Bus.findByIdAndUpdate(busId, bus, {
       new: true,
-    });
+    }).populate("owners");
     return updatedBus;
   };
 
