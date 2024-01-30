@@ -3,11 +3,12 @@ import dotenv from "dotenv";
 
 import mongoose from "mongoose";
 import cors from "cors";
-import userRouter from "./src/routes/user-routes";
+import userRouter from "./src/routes/user.routes";
 import { authRequired } from "./src/utils/middleware/auth.middleware";
 dotenv.config();
 import initializeFirebaseApp from "./src/service/firebase";
-import busRouter from "./src/routes/bus-routes";
+import busRouter from "./src/routes/bus.routes";
+import departureRouter from "./src/routes/departure.routes";
 initializeFirebaseApp();
 const port = process.env.PORT || 3000;
 try {
@@ -26,6 +27,7 @@ app.use("/public", express.static("public"));
 app.use(authRequired);
 app.use("/user", userRouter);
 app.use("/bus", busRouter);
+app.use("/departure", departureRouter);
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.log(err);

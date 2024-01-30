@@ -30,6 +30,28 @@ class DepartureRepository {
     const departures: departureType[] = await Departure.find().populate("bus");
     return departures;
   };
+  getDepartureByBusId = async (busId: string): Promise<departureType[]> => {
+    const departures: departureType[] = await Departure.find()
+      .where({
+        bus: busId,
+      })
+      .populate("bus");
+    return departures;
+  };
+  getDepartures = async (
+    from: string,
+    to: string,
+    date: Date
+  ): Promise<departureType[]> => {
+    const departures: departureType[] = await Departure.find()
+      .where({
+        from,
+        to,
+        date,
+      })
+      .populate("bus");
+    return departures;
+  };
   deleteDepartureById = async (id: string) => {
     const departure = await Departure.findByIdAndDelete(id);
     return departure;

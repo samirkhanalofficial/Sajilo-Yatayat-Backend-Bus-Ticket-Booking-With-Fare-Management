@@ -38,11 +38,18 @@ class BusRepository {
     ).populate("owners");
     return bus;
   };
-  getBusByOwner = async (ownerId: string): Promise<busType> => {
-    const bus = await Bus.findOne({
+  getBussesByOwner = async (ownerId: string): Promise<busType[]> => {
+    const busses: busType[] = await Bus.find({
       $in: { owners: [ownerId] },
     }).populate("owners");
-    return bus;
+    return busses;
+  };
+  isOwnerOfBus = async (busId: string, ownerId: string): Promise<boolean> => {
+    const bus = await Bus.find({
+      id: busId,
+      $in: { owners: [ownerId] },
+    }).populate("owners");
+    return bus.length > 0;
   };
 
   getAllBus = async (): Promise<busType[]> => {

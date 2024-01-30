@@ -19,7 +19,7 @@ busRouter.post("/add", async (req: AuthUserRequest, res: Response) => {
 
 busRouter.get("/mybuses", async (req: AuthUserRequest, res: Response) => {
   try {
-    const buses = await busRepository.getBusByOwner(req.user!.id);
+    const buses = await busRepository.getBussesByOwner(req.user!.id);
     return res.status(200).json(buses);
   } catch (error: any) {
     return res.status(400).json({ message: error });
