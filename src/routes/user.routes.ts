@@ -8,7 +8,8 @@ userRouter.post("/create", async (req: AuthUserRequest, res: Response) => {
   try {
     const { error, value } = createUserValidation.validate(req.body);
     if (error) throw error.message;
-    if (req.user) throw "User already exists.";
+    // TODO : check if user already exists
+    // if (req.user) throw "User already exists.";
     const user = await userRepository.addUser({
       ...value,
       mobile: req.phone_number!,
