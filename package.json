@@ -6,7 +6,8 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node dist/main.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q   dist/main.js\""
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q   dist/main.js\"",
+    "dockerbuild": "npx tsc && npm start"
   },
   "keywords": [],
   "author": "Samir Khanal",
