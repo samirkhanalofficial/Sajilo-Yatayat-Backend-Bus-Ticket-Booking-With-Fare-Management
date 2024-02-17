@@ -9,6 +9,7 @@ export type createDepartureType = {
   amount: number;
 };
 export type departureType = createDepartureType & {
+  id: string;
   bus: busType;
   timestamp: Date;
 };
