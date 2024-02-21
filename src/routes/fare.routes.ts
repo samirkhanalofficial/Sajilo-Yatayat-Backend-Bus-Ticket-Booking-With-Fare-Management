@@ -8,7 +8,7 @@ import Joi from "joi";
 import { busRepository } from "../repository/bus.repository";
 
 const fareRouter = express.Router();
-fareRouter.post("/add", async (req: AuthUserRequest, res: Response) => {
+fareRouter.post("/create", async (req: AuthUserRequest, res: Response) => {
   try {
     const { error, value } = await createFareValidation.validate(req.body);
     if (error) throw error.message;
@@ -20,6 +20,15 @@ fareRouter.post("/add", async (req: AuthUserRequest, res: Response) => {
       value.departure
     );
     for (var toBookSeat in value.seats) {
+      if (
+        parseInt(toBookSeat.toString()) >
+          departureExists.bus.leftSeats +
+            departureExists.bus.rightSeats +
+            departureExists.bus.lastSeats ||
+        parseInt(toBookSeat.toString()) <= 0
+      ) {
+        throw `${toBookSeat} doesn't exists.`;
+      }
       if (
         bookedSeats.filter(
           (alreadyBookedSeat) =>
