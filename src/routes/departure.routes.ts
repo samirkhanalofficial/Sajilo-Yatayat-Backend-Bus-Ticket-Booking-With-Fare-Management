@@ -1,7 +1,6 @@
 import express, { Response } from "express";
 import { AuthUserRequest } from "../utils/types/auth-user-request";
 import { busRepository } from "../repository/bus.repository";
-import { createBusValidation } from "../validation/create-bus.validation";
 import { createDepartureValidation } from "../validation/create-departure.validation";
 import { departureRepository } from "../repository/departure.repository";
 import { getDeparturesValidation } from "../validation/get-departures.validation";

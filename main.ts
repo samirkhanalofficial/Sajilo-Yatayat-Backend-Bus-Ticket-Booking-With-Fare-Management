@@ -1,4 +1,4 @@
-import express, { Express, NextFunction, Request, Response } from "express";
+import express, { Express } from "express";
 import dotenv from "dotenv";
 
 import mongoose from "mongoose";
@@ -9,6 +9,7 @@ dotenv.config();
 import initializeFirebaseApp from "./src/service/firebase";
 import busRouter from "./src/routes/bus.routes";
 import departureRouter from "./src/routes/departure.routes";
+import fareRouter from "./src/routes/fare.routes";
 initializeFirebaseApp();
 const port = process.env.PORT || 3000;
 try {
@@ -28,12 +29,13 @@ app.use(authRequired);
 app.use("/user", userRouter);
 app.use("/bus", busRouter);
 app.use("/departure", departureRouter);
+app.use("/fare", fareRouter);
 
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  console.log(err);
-  res.status(500).json({ message: "Something went wrong" });
-  next(err);
-});
+// app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+//   console.log(err);
+//   res.status(500).json({ message: "Something went wrong" });
+//   next(err);
+// });
 // app.use("/khalti", khaltiRouter);
 
 app.listen(port, () => {

@@ -14,14 +14,28 @@ class FareRepository {
     const fare = await Fare.findById(id);
     return fare;
   };
-
+  getBookedSeatByDepartureId = async (
+    departureId: string
+  ): Promise<number[]> => {
+    const acceptedSeats = await Fare.find(
+      { departure: departureId, status: FARESTATUS.ACCEPTED },
+      { seats: 1, _id: 0 }
+    );
+    return acceptedSeats;
+  };
   getFaresByDepartureId = async (departureId: string): Promise<fareType[]> => {
     const fares = await Fare.find({ departure: departureId });
     return fares;
   };
-  getMyFares = async (userId: string): Promise<fareType[]> => {
+  getUsersFares = async (userId: string): Promise<fareType[]> => {
     const fares = await Fare.find({
-      $or: [{ faredTo: userId }, { faredBy: userId }],
+      $or: [{ faredBy: userId }],
+    });
+    return fares;
+  };
+  getBusFares = async (busId: string): Promise<fareType[]> => {
+    const fares = await Fare.find({
+      $or: [{ bus: busId }],
     });
     return fares;
   };
@@ -73,7 +87,14 @@ class FareRepository {
     );
     return updatedFare;
   };
-
+  payFareById = async (id: string): Promise<fareType> => {
+    const updatedFare = await Fare.findByIdAndUpdate(
+      id,
+      { status: FARESTATUS.PAID },
+      { new: true }
+    );
+    return updatedFare;
+  };
   deleteFareById = async (id: string): Promise<fareType> => {
     const fare = await Fare.findByIdAndDelete(id, { new: false });
     return fare;
