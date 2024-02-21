@@ -109,6 +109,45 @@ fareRouter.patch("/accept/:id", async (req: AuthUserRequest, res: Response) => {
     return res.status(400).json({ message: error });
   }
 });
+
+fareRouter.patch(
+  "/changePrice/:id",
+  async (req: AuthUserRequest, res: Response) => {
+    try {
+      const { error, value } = await Joi.object({
+        fareId: Joi.string().required(),
+        amount: Joi.number().required(),
+      }).validate({
+        fareId: req.params.id,
+        ...req.body,
+      });
+
+      if (error) throw error.message;
+      const fare = await fareRepository.getFareById(value.fareId);
+      if (!fare) throw "No fare found";
+      const isBusOwner = await busRepository.isOwnerOfBus(
+        fare.bus.id,
+        req.user!.id
+      );
+      if (fare.status !== FARESTATUS.PENDING)
+        throw `fares that are ${fare.status} cannot be approved.`;
+
+      // restrict other than bus owner & farerer
+      if (fare.faredBy.id != req.user!.id || !isBusOwner)
+        throw "You dont have permission to accept this fare.";
+
+      const fares = await fareRepository.updateFarePriceById(
+        value.fareId,
+        value.amount,
+        !isBusOwner
+      );
+      return res.status(200).json(fares);
+    } catch (error) {
+      return res.status(400).json({ message: error });
+    }
+  }
+);
+
 fareRouter.patch("/reject/:id", async (req: AuthUserRequest, res: Response) => {
   try {
     const { error, value } = await Joi.object({

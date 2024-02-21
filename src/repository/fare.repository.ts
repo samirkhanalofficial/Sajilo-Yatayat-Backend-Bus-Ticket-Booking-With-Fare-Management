@@ -71,6 +71,18 @@ class FareRepository {
     );
     return updatedFare;
   };
+  updateFarePriceById = async (
+    id: string,
+    amount: number,
+    isFaredByUser: boolean
+  ): Promise<fareType> => {
+    const updatedFare = await Fare.findByIdAndUpdate(
+      id,
+      { status: FARESTATUS.PENDING, amount, isFaredByUser },
+      { new: true }
+    );
+    return updatedFare;
+  };
   cancelFareById = async (id: string): Promise<fareType> => {
     const updatedFare = await Fare.findByIdAndUpdate(
       id,
