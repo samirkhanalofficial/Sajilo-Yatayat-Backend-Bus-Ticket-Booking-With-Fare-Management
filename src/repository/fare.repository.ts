@@ -18,11 +18,15 @@ class FareRepository {
     departureId: string
   ): Promise<number[]> => {
     const acceptedSeats = await Fare.find(
-      { departure: departureId, status: FARESTATUS.ACCEPTED },
+      {
+        departure: departureId,
+        $or: [{ status: FARESTATUS.ACCEPTED }, { status: FARESTATUS.PAID }],
+      },
       { seats: 1, _id: 0 }
     );
     return acceptedSeats;
   };
+
   getFaresByDepartureId = async (departureId: string): Promise<fareType[]> => {
     const fares = await Fare.find({ departure: departureId });
     return fares;
