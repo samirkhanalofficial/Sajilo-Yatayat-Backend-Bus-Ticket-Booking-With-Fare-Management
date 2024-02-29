@@ -3,4 +3,8 @@ export enum BUSFEATURES {
   WIFI = "WIFI",
   TV = "TV",
   CHARGER = "CHARGER",
+  SOFASEAT = "SOFASEAT",
+  TOILET = "TOILET",
+  MUSIC = "MUSIC",
+  FOOD = "FOOD",
 }
