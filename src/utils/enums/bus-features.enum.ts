@@ -7,4 +7,5 @@ export enum BUSFEATURES {
   TOILET = "TOILET",
   MUSIC = "MUSIC",
   FOOD = "FOOD",
+  FAN = "FAN",
 }

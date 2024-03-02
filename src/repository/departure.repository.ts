@@ -12,7 +12,7 @@ class DepartureRepository {
     await departureData.save();
     return departureData;
   };
-  getDepartureById = async (id: string): Promise<departureType | null> => {
+  getDepartureById = async (id: string): Promise<departureType> => {
     const departure = await Departure.findById(id).populate("bus");
     return departure;
   };

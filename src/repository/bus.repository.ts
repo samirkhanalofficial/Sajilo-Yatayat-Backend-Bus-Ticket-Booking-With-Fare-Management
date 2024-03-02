@@ -48,7 +48,7 @@ class BusRepository {
   };
   isOwnerOfBus = async (busId: string, ownerId: string): Promise<boolean> => {
     const bus = await Bus.find({
-      id: busId,
+      _id: busId,
       owners: { $in: [ownerId] },
     }).populate("owners");
     return bus.length > 0;
