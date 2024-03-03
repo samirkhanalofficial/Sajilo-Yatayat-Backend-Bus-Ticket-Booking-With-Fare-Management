@@ -7,7 +7,7 @@ class BusRepository {
   addBus = async (bus: createBusType): Promise<busType> => {
     const busData = new Bus(bus);
     await busData.save();
-    return busData;
+    return this.getBusById(busData._id);
   };
 
   getBusById = async (id: string): Promise<busType> => {
