@@ -70,7 +70,7 @@ class BusRepository {
   };
 
   deleteBusById = async (busId: string) => {
-    const bus = await Bus.findByIdAndDelete(busId);
+    const bus = await Bus.findByIdAndDelete(busId).populate("owners");
     return bus;
   };
 }

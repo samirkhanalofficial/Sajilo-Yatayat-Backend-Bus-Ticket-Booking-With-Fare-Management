@@ -1,4 +1,5 @@
 import Departure from "../model/departure.model";
+import User from "../model/user.model";
 import {
   createDepartureType,
   departureType,
@@ -10,10 +11,17 @@ class DepartureRepository {
   ): Promise<departureType> => {
     const departureData = new Departure(departure);
     await departureData.save();
-    return departureData;
+    return this.getDepartureById(departureData.id);
   };
   getDepartureById = async (id: string): Promise<departureType> => {
-    const departure = await Departure.findById(id).populate("bus");
+    const departure = await Departure.findById(id)
+      .populate({
+        path: "bus",
+        populate: {
+          path: "owners",
+        },
+      })
+      .populate(["from", "to"]);
     return departure;
   };
   updateDepartureDetails = async (
@@ -22,12 +30,26 @@ class DepartureRepository {
   ): Promise<departureType> => {
     const updatedDeparture = await Departure.findByIdAndUpdate(id, departure, {
       new: true,
-    }).populate("bus");
+    })
+      .populate({
+        path: "bus",
+        populate: {
+          path: "owners",
+        },
+      })
+      .populate(["from", "to"]);
     return updatedDeparture;
   };
 
   getAllDeparture = async (): Promise<departureType[]> => {
-    const departures: departureType[] = await Departure.find().populate("bus");
+    const departures: departureType[] = await Departure.find()
+      .populate({
+        path: "bus",
+        populate: {
+          path: "owners",
+        },
+      })
+      .populate(["from", "to"]);
     return departures;
   };
   getDepartureByBusId = async (busId: string): Promise<departureType[]> => {
@@ -35,7 +57,13 @@ class DepartureRepository {
       .where({
         bus: busId,
       })
-      .populate("bus");
+      .populate({
+        path: "bus",
+        populate: {
+          path: "owners",
+        },
+      })
+      .populate(["from", "to"]);
     return departures;
   };
   getDepartures = async (
@@ -49,11 +77,24 @@ class DepartureRepository {
         to,
         date,
       })
-      .populate("bus");
+      .populate({
+        path: "bus",
+        populate: {
+          path: "owners",
+        },
+      })
+      .populate(["from", "to"]);
     return departures;
   };
   deleteDepartureById = async (id: string) => {
-    const departure = await Departure.findByIdAndDelete(id);
+    const departure = await Departure.findByIdAndDelete(id)
+      .populate({
+        path: "bus",
+        populate: {
+          path: "owners",
+        },
+      })
+      .populate(["from", "to"]);
     return departure;
   };
 }
