@@ -1,10 +1,14 @@
-// import mongoose from "mongoose";
+import mongoose from "mongoose";
+import Fare from "./fare.model";
+import { khaltitype } from "../utils/types/khalti.type";
 
-// const khaltiSchema = new mongoose.Schema({
-//   token: { type: String, required: true },
-//   request_id: { type: String, required: true },
-//   isPaid: { type: Boolean, default: false },
-// });
+const khaltiSchema = new mongoose.Schema<khaltitype>({
+  token: { type: String, required: true },
+  mobile: { type: String, required: true },
+  amount: { type: Number, required: true },
+  fare: { type: String, required: true, ref: Fare },
+  isPaid: { type: Boolean, default: false },
+});
 
-// const Khalti = mongoose.models.Khalti || mongoose.model("Khalti", khaltiSchema);
-// export default Khalti;
+const Khalti = mongoose.models.Khalti || mongoose.model("Khalti", khaltiSchema);
+export default Khalti;

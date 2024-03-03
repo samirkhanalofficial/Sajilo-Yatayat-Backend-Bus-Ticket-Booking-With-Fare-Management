@@ -1,5 +1,4 @@
 import Departure from "../model/departure.model";
-import User from "../model/user.model";
 import {
   createDepartureType,
   departureType,

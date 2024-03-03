@@ -1,7 +1,7 @@
 import Joi from "joi";
 
 export const KhaltiValidation = Joi.object({
-  request_id: Joi.string().required(),
+  fare: Joi.string().required(),
   mobile: Joi.string().required().max(10),
   transaction_pin: Joi.string().required(),
 });

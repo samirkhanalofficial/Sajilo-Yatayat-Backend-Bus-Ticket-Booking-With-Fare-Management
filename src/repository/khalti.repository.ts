@@ -1,10 +1,10 @@
 import Khalti from "../model/khalti.model";
-import { khaltiType } from "../utils/types/khalti.type";
+import { createKhaltiType } from "../utils/types/khalti.type";
 
 class KhaltiRepository {
   constructor() {}
 
-  addData = async (dataToSave: khaltiType) => {
+  addData = async (dataToSave: createKhaltiType) => {
     const khaltiData = new Khalti(dataToSave);
     await khaltiData.save();
     return khaltiData;
