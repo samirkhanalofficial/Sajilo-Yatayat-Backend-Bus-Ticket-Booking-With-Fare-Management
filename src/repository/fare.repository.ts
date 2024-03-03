@@ -1,3 +1,4 @@
+import { FilterQuery } from "mongoose";
 import Fare from "../model/fare.model";
 import { FARESTATUS } from "../utils/enums/departure-status.enum";
 import { createFareType, fareType } from "../utils/types/fare.type";
@@ -24,7 +25,7 @@ class FareRepository {
       },
       { seats: 1, _id: 0 }
     );
-    return acceptedSeats;
+    return acceptedSeats[0].seats;
   };
 
   getFaresByDepartureId = async (departureId: string): Promise<fareType[]> => {
@@ -47,7 +48,10 @@ class FareRepository {
     const fare = await this.getFareById(id);
     // reject other fares
     await Fare.updateMany(
-      { departure: fare.departure },
+      {
+        departure: fare.departure,
+        $or: [{ seats: { $in: fare.seats } }],
+      },
       {
         status: FARESTATUS.REJECTED,
       }

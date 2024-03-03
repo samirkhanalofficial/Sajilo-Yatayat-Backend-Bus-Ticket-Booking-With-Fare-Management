@@ -41,7 +41,7 @@ class DepartureRepository {
   getDepartures = async (
     from: string,
     to: string,
-    date: Date
+    date: string
   ): Promise<departureType[]> => {
     const departures: departureType[] = await Departure.find()
       .where({

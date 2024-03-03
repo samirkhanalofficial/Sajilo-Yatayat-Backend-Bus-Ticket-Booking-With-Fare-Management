@@ -19,7 +19,7 @@ fareRouter.post("/create", async (req: AuthUserRequest, res: Response) => {
     const bookedSeats = await fareRepository.getBookedSeatByDepartureId(
       value.departure
     );
-    for (var toBookSeat in value.seats) {
+    for (let toBookSeat of value.seats) {
       if (
         parseInt(toBookSeat.toString()) >
           departureExists.bus.leftSeats +
@@ -27,7 +27,7 @@ fareRouter.post("/create", async (req: AuthUserRequest, res: Response) => {
             departureExists.bus.lastSeats ||
         parseInt(toBookSeat.toString()) <= 0
       ) {
-        throw `${toBookSeat} doesn't exists.`;
+        throw `Seat no. ${toBookSeat} doesn't exists.`;
       }
       if (
         bookedSeats.filter(
@@ -38,13 +38,17 @@ fareRouter.post("/create", async (req: AuthUserRequest, res: Response) => {
         throw `${toBookSeat} has already been booked.`;
       }
     }
-    const fare = await fareRepository.createFare({
+
+    let fare = await fareRepository.createFare({
       ...value,
       faredBy: req.user?.id ?? "",
       bus: departureExists.bus.id,
       isFaredByUser: true,
       status: FARESTATUS.PENDING,
     });
+    if (value.amount > value.seats.length * departureExists.amount) {
+      fare = await fareRepository.approveFareById(fare.id);
+    }
     return res.status(201).json(fare);
   } catch (error) {
     return res.status(400).json({ message: error });

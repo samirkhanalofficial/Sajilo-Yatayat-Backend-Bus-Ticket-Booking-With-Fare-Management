@@ -4,7 +4,7 @@ export type createDepartureType = {
   from: string;
   to: string;
   bus: string;
-  date: Date;
+  date: string;
   time: string;
   amount: number;
 };

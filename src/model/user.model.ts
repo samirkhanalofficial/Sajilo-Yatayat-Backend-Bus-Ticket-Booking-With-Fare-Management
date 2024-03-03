@@ -4,7 +4,7 @@ import { userType } from "../utils/types/user.type";
 const userSchema = new mongoose.Schema<userType>({
   name: { type: String, required: true, min: 3, max: 200 },
   mobile: { type: String, required: true },
-  dob: { type: Date, required: true },
+  dob: { type: String, required: true },
   address: { type: String, required: true },
   gender: { type: String, required: true },
   timestamp: {
