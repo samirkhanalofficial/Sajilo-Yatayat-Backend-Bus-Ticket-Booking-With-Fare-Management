@@ -11,7 +11,7 @@ class FareRepository {
     return fare;
   };
   getFareById = async (id: string): Promise<fareType> => {
-    const fare = await Fare.findById(id);
+    const fare = await Fare.findById(id).populate("departure");
     return fare;
   };
   getBookedSeatByDepartureId = async (
@@ -27,20 +27,22 @@ class FareRepository {
     return acceptedSeats[0].seats;
   };
 
-  getFaresByDepartureId = async (departureId: string): Promise<fareType[]> => {
-    const fares = await Fare.find({ departure: departureId });
+  getFaresByDepartureId = async (departureId: string) => {
+    const fares = await Fare.find({ departure: departureId }).populate(
+      "departure"
+    );
     return fares;
   };
-  getUsersFares = async (userId: string): Promise<fareType[]> => {
+  getUsersFares = async (userId: string) => {
     const fares = await Fare.find({
       $or: [{ faredBy: userId }],
-    });
+    }).populate("departure");
     return fares;
   };
-  getBusFares = async (busId: string): Promise<fareType[]> => {
+  getBusFares = async (busId: string) => {
     const fares = await Fare.find({
       $or: [{ bus: busId }],
-    });
+    }).populate("departure");
     return fares;
   };
   approveFareById = async (id: string): Promise<fareType> => {
