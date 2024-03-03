@@ -1,4 +1,3 @@
-import { FilterQuery } from "mongoose";
 import Fare from "../model/fare.model";
 import { FARESTATUS } from "../utils/enums/departure-status.enum";
 import { createFareType, fareType } from "../utils/types/fare.type";
