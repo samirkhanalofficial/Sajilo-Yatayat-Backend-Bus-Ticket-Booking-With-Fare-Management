@@ -4,11 +4,21 @@ import { busRepository } from "../repository/bus.repository";
 import { createDepartureValidation } from "../validation/create-departure.validation";
 import { departureRepository } from "../repository/departure.repository";
 import { getDeparturesValidation } from "../validation/get-departures.validation";
+import { locationRepository } from "../repository/location.repository";
 const departureRouter = express.Router();
 departureRouter.post("/add", async (req: AuthUserRequest, res: Response) => {
   try {
     const { error, value } = await createDepartureValidation.validate(req.body);
     if (error) throw error.message;
+    const fromLocationExists = await locationRepository.getLocationById(
+      value.from
+    );
+    const toLocationExists = await locationRepository.getLocationById(
+      value.from
+    );
+    if (!fromLocationExists) throw "From Location is invalid.";
+    if (!toLocationExists) throw "To Location is invalid.";
+
     const isOwner = await busRepository.isOwnerOfBus(value.bus, req.user!.id);
     if (!isOwner) throw "You are not owner of this bus";
     const departure = await departureRepository.addDeparture({
@@ -40,6 +50,14 @@ departureRouter.post(
     try {
       const { error, value } = await getDeparturesValidation.validate(req.body);
       if (error) throw error.message;
+      const fromLocationExists = await locationRepository.getLocationById(
+        value.from
+      );
+      const toLocationExists = await locationRepository.getLocationById(
+        value.from
+      );
+      if (!fromLocationExists) throw "From Location is invalid.";
+      if (!toLocationExists) throw "To Location is invalid.";
       const departures = await departureRepository.getDepartures(
         value.from,
         value.to,

@@ -11,5 +11,7 @@ export type createDepartureType = {
 export type departureType = createDepartureType & {
   id: string;
   bus: busType;
+  from: locationType;
+  to: locationType;
   timestamp: Date;
 };
