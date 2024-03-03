@@ -33,7 +33,7 @@ app.use("/bus", busRouter);
 app.use("/departure", departureRouter);
 app.use("/fare", fareRouter);
 app.use("/location", locationRouter);
-app.use("/location", khaltiRouter);
+app.use("/pay/khalti", khaltiRouter);
 
 // app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 //   console.log(err);
