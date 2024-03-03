@@ -1,11 +1,9 @@
 // import express, { Request, Response } from "express";
 // import { AuthUserRequest } from "../utils/types/auth-user-request";
-// import {
-//   KhaltiValidation,
-//   VerifyKhaltiPayment,
-// } from "../validation/khalti.validation";
-// import { requestRepository } from "../repository/request.repository";
+
 // import { khaltiRepository } from "../repository/khalti.repository";
+// import { KhaltiValidation } from "../validation/khalti-validation";
+// import { fareRepository } from "../repository/fare.repository";
 
 // const khaltiRouter = express.Router();
 // // init payment
@@ -15,7 +13,7 @@
 //     try {
 //       const { error, value } = KhaltiValidation.validate(req.body);
 //       if (error) throw error.message;
-//       const request = await requestRepository.getRequestById(value.request_id);
+//       const request = await fareRepository.getFareById(value.request_id);
 //       if (!request) throw "No request found";
 //       const data = await fetch("https://khalti.com/api/v2/payment/initiate/", {
 //         method: "POST",

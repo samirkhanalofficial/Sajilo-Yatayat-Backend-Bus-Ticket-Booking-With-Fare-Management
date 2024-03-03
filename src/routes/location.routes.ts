@@ -20,7 +20,7 @@ locationRouter.get(
   async (_: AuthUserRequest, res: Response) => {
     try {
       const locations = await locationRepository.getAllLocations();
-      return res.status(201).json(locations);
+      return res.status(200).json(locations);
     } catch (error) {
       return res.status(400).json({ message: error });
     }
