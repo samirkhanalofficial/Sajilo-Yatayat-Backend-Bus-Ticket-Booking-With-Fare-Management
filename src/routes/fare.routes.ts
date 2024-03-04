@@ -144,7 +144,7 @@ fareRouter.patch(
       const fares = await fareRepository.updateFarePriceById(
         value.fareId,
         value.amount,
-        !isBusOwner
+        !fare.isFaredByUser
       );
       return res.status(200).json(fares);
     } catch (error) {
