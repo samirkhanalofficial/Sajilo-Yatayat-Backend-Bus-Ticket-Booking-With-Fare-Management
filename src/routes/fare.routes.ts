@@ -104,7 +104,7 @@ fareRouter.patch("/accept/:id", async (req: AuthUserRequest, res: Response) => {
       throw "You dont have permission to accept this fare.";
     if (
       (fare.isFaredByUser && fare.faredBy == req.user!.id) ||
-      (!fare.isFaredByUser && isBusOwner)
+      (fare.isFaredByUser == false && isBusOwner)
     )
       throw "You cant accept your own fare.";
 
