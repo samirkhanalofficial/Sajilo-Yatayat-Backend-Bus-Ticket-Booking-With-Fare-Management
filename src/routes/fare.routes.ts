@@ -46,11 +46,12 @@ fareRouter.post("/create", async (req: AuthUserRequest, res: Response) => {
       isFaredByUser: true,
       status: FARESTATUS.PENDING,
     });
-    if (value.amount > value.seats.length * departureExists.amount) {
+    if (value.amount >= value.seats.length * departureExists.amount) {
       fare = await fareRepository.approveFareById(fare.id);
     }
     return res.status(201).json(fare);
   } catch (error) {
+    console.log(error);
     return res.status(400).json({ message: error });
   }
 });

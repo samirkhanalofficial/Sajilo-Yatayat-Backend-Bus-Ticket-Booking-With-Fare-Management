@@ -1,9 +1,9 @@
 import mongoose, { Schema } from "mongoose";
-import Departure from "./departure.model";
 import { FARESTATUS } from "../utils/enums/departure-status.enum";
 import User from "./user.model";
 import { fareType } from "../utils/types/fare.type";
 import Bus from "./bus.model";
+import Departure from "./departure.model";
 
 const fareSchema = new Schema<fareType>({
   seats: { type: [Number], required: true },

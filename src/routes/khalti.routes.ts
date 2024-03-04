@@ -36,6 +36,7 @@ khaltiRouter.post(
       })
         .then(async (res) => {
           const body = await res.json();
+          console.log(body);
           if (res.status != 200) {
             throw "Incorrect mobile number or Pin";
           }
@@ -59,19 +60,7 @@ khaltiRouter.post(
   }
 );
 // get khalti data by token
-khaltiRouter.get(
-  "/token/:token",
-  async (req: AuthUserRequest, res: Response) => {
-    try {
-      const token = req.params.token ?? "";
-      const khaltiData = await khaltiRepository.getDataByToken(token);
-      if (!khaltiData) throw "error getting khalti data";
-      return res.status(200).json(khaltiData);
-    } catch (e) {
-      return res.status(400).json({ message: e });
-    }
-  }
-);
+
 khaltiRouter.post("/verify", async (req: AuthUserRequest, res: Response) => {
   try {
     const { error, value } = VerifyKhaltiPayment.validate(req.body);
@@ -94,7 +83,7 @@ khaltiRouter.post("/verify", async (req: AuthUserRequest, res: Response) => {
     })
       .then(async (res) => {
         const body = await res.json();
-
+        console.log(body);
         if (res.status != 200) {
           throw "Error verifying confirmation code.";
         }

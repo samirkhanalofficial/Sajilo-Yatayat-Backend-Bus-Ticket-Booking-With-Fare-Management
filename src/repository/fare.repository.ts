@@ -14,12 +14,20 @@ class FareRepository {
     const fare = await Fare.findById(id)
       .populate({
         path: "departure",
-        populate: {
-          path: "bus",
-          populate: {
-            path: "owners",
+        populate: [
+          {
+            path: "bus",
+            populate: {
+              path: "owners",
+            },
           },
-        },
+          {
+            path: "from",
+          },
+          {
+            path: "to",
+          },
+        ],
       })
       .populate({
         path: "bus",
@@ -27,7 +35,7 @@ class FareRepository {
           path: "owners",
         },
       })
-      .populate(["user"]);
+      .populate(["faredBy"]);
     return fare;
   };
   getBookedSeatByDepartureId = async (
@@ -40,19 +48,28 @@ class FareRepository {
       },
       { seats: 1, _id: 0 }
     );
-    return acceptedSeats[0].seats;
+
+    return acceptedSeats.map((arr) => arr.seats).flat();
   };
 
   getFaresByDepartureId = async (departureId: string) => {
     const fares = await Fare.find({ departure: departureId })
       .populate({
         path: "departure",
-        populate: {
-          path: "bus",
-          populate: {
-            path: "owners",
+        populate: [
+          {
+            path: "bus",
+            populate: {
+              path: "owners",
+            },
           },
-        },
+          {
+            path: "from",
+          },
+          {
+            path: "to",
+          },
+        ],
       })
       .populate({
         path: "bus",
@@ -60,7 +77,7 @@ class FareRepository {
           path: "owners",
         },
       })
-      .populate(["user"]);
+      .populate(["faredBy"]);
     return fares;
   };
   getUsersFares = async (userId: string) => {
@@ -69,12 +86,20 @@ class FareRepository {
     })
       .populate({
         path: "departure",
-        populate: {
-          path: "bus",
-          populate: {
-            path: "owners",
+        populate: [
+          {
+            path: "bus",
+            populate: {
+              path: "owners",
+            },
           },
-        },
+          {
+            path: "from",
+          },
+          {
+            path: "to",
+          },
+        ],
       })
       .populate({
         path: "bus",
@@ -82,7 +107,7 @@ class FareRepository {
           path: "owners",
         },
       })
-      .populate(["user"]);
+      .populate(["faredBy"]);
     return fares;
   };
   getBusFares = async (busId: string) => {
@@ -91,12 +116,20 @@ class FareRepository {
     })
       .populate({
         path: "departure",
-        populate: {
-          path: "bus",
-          populate: {
-            path: "owners",
+        populate: [
+          {
+            path: "bus",
+            populate: {
+              path: "owners",
+            },
           },
-        },
+          {
+            path: "from",
+          },
+          {
+            path: "to",
+          },
+        ],
       })
       .populate({
         path: "bus",
@@ -104,7 +137,7 @@ class FareRepository {
           path: "owners",
         },
       })
-      .populate(["user"]);
+      .populate(["faredBy"]);
     return fares;
   };
   approveFareById = async (id: string): Promise<fareType> => {
@@ -112,7 +145,7 @@ class FareRepository {
     // reject other fares
     await Fare.updateMany(
       {
-        departure: fare.departure,
+        departure: fare.departure.id,
         $or: [{ seats: { $in: fare.seats } }],
       },
       {
@@ -126,12 +159,20 @@ class FareRepository {
     )
       .populate({
         path: "departure",
-        populate: {
-          path: "bus",
-          populate: {
-            path: "owners",
+        populate: [
+          {
+            path: "bus",
+            populate: {
+              path: "owners",
+            },
           },
-        },
+          {
+            path: "from",
+          },
+          {
+            path: "to",
+          },
+        ],
       })
       .populate({
         path: "bus",
@@ -139,7 +180,7 @@ class FareRepository {
           path: "owners",
         },
       })
-      .populate(["user"]);
+      .populate(["faredBy"]);
     return updatedFare;
   };
   rejectFareById = async (id: string): Promise<fareType> => {
@@ -150,12 +191,20 @@ class FareRepository {
     )
       .populate({
         path: "departure",
-        populate: {
-          path: "bus",
-          populate: {
-            path: "owners",
+        populate: [
+          {
+            path: "bus",
+            populate: {
+              path: "owners",
+            },
           },
-        },
+          {
+            path: "from",
+          },
+          {
+            path: "to",
+          },
+        ],
       })
       .populate({
         path: "bus",
@@ -163,7 +212,7 @@ class FareRepository {
           path: "owners",
         },
       })
-      .populate(["user"]);
+      .populate(["faredBy"]);
     return updatedFare;
   };
   refundFareById = async (id: string): Promise<fareType> => {
@@ -174,12 +223,20 @@ class FareRepository {
     )
       .populate({
         path: "departure",
-        populate: {
-          path: "bus",
-          populate: {
-            path: "owners",
+        populate: [
+          {
+            path: "bus",
+            populate: {
+              path: "owners",
+            },
           },
-        },
+          {
+            path: "from",
+          },
+          {
+            path: "to",
+          },
+        ],
       })
       .populate({
         path: "bus",
@@ -187,7 +244,7 @@ class FareRepository {
           path: "owners",
         },
       })
-      .populate(["user"]);
+      .populate(["faredBy"]);
     return updatedFare;
   };
   updateFarePriceById = async (
@@ -202,12 +259,20 @@ class FareRepository {
     )
       .populate({
         path: "departure",
-        populate: {
-          path: "bus",
-          populate: {
-            path: "owners",
+        populate: [
+          {
+            path: "bus",
+            populate: {
+              path: "owners",
+            },
           },
-        },
+          {
+            path: "from",
+          },
+          {
+            path: "to",
+          },
+        ],
       })
       .populate({
         path: "bus",
@@ -215,7 +280,7 @@ class FareRepository {
           path: "owners",
         },
       })
-      .populate(["user"]);
+      .populate(["faredBy"]);
     return updatedFare;
   };
   cancelFareById = async (id: string): Promise<fareType> => {
@@ -226,12 +291,20 @@ class FareRepository {
     )
       .populate({
         path: "departure",
-        populate: {
-          path: "bus",
-          populate: {
-            path: "owners",
+        populate: [
+          {
+            path: "bus",
+            populate: {
+              path: "owners",
+            },
           },
-        },
+          {
+            path: "from",
+          },
+          {
+            path: "to",
+          },
+        ],
       })
       .populate({
         path: "bus",
@@ -239,7 +312,7 @@ class FareRepository {
           path: "owners",
         },
       })
-      .populate(["user"]);
+      .populate(["faredBy"]);
     return updatedFare;
   };
   completeFareById = async (id: string): Promise<fareType> => {
@@ -250,12 +323,20 @@ class FareRepository {
     )
       .populate({
         path: "departure",
-        populate: {
-          path: "bus",
-          populate: {
-            path: "owners",
+        populate: [
+          {
+            path: "bus",
+            populate: {
+              path: "owners",
+            },
           },
-        },
+          {
+            path: "from",
+          },
+          {
+            path: "to",
+          },
+        ],
       })
       .populate({
         path: "bus",
@@ -263,7 +344,7 @@ class FareRepository {
           path: "owners",
         },
       })
-      .populate(["user"]);
+      .populate(["faredBy"]);
     return updatedFare;
   };
   payFareById = async (id: string): Promise<fareType> => {
@@ -274,12 +355,20 @@ class FareRepository {
     )
       .populate({
         path: "departure",
-        populate: {
-          path: "bus",
-          populate: {
-            path: "owners",
+        populate: [
+          {
+            path: "bus",
+            populate: {
+              path: "owners",
+            },
           },
-        },
+          {
+            path: "from",
+          },
+          {
+            path: "to",
+          },
+        ],
       })
       .populate({
         path: "bus",
@@ -287,19 +376,27 @@ class FareRepository {
           path: "owners",
         },
       })
-      .populate(["user"]);
+      .populate(["faredBy"]);
     return updatedFare;
   };
   deleteFareById = async (id: string): Promise<fareType> => {
     const fare = await Fare.findByIdAndDelete(id, { new: false })
       .populate({
         path: "departure",
-        populate: {
-          path: "bus",
-          populate: {
-            path: "owners",
+        populate: [
+          {
+            path: "bus",
+            populate: {
+              path: "owners",
+            },
           },
-        },
+          {
+            path: "from",
+          },
+          {
+            path: "to",
+          },
+        ],
       })
       .populate({
         path: "bus",
@@ -307,7 +404,7 @@ class FareRepository {
           path: "owners",
         },
       })
-      .populate(["user"]);
+      .populate(["faredBy"]);
     return fare;
   };
 }

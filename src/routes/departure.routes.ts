@@ -5,6 +5,7 @@ import { createDepartureValidation } from "../validation/create-departure.valida
 import { departureRepository } from "../repository/departure.repository";
 import { getDeparturesValidation } from "../validation/get-departures.validation";
 import { locationRepository } from "../repository/location.repository";
+import { fareRepository } from "../repository/fare.repository";
 const departureRouter = express.Router();
 departureRouter.post("/add", async (req: AuthUserRequest, res: Response) => {
   try {
@@ -39,6 +40,27 @@ departureRouter.get(
       if (!isOwner) throw "You are not owner of this bus";
       const departures = await departureRepository.getDepartureByBusId(busId);
       return res.status(200).json(departures);
+    } catch (error: any) {
+      return res.status(400).json({ message: error });
+    }
+  }
+);
+departureRouter.get(
+  "/booked-seats/:departureId",
+  async (req: AuthUserRequest, res: Response) => {
+    try {
+      const departureId = req.params.departureId || "";
+      const departureExists = await departureRepository.getDepartureById(
+        departureId
+      );
+      if (!departureExists) throw "Departure doesnot exists.";
+
+      const seats = await fareRepository.getBookedSeatByDepartureId(
+        departureId
+      );
+
+      console.log(seats);
+      return res.status(200).json(seats);
     } catch (error: any) {
       return res.status(400).json({ message: error });
     }
