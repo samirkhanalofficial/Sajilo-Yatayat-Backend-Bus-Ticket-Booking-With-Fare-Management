@@ -77,7 +77,8 @@ class FareRepository {
           path: "owners",
         },
       })
-      .populate(["faredBy"]);
+      .populate(["faredBy"])
+      .sort({ timestamp: -1 });
     return fares;
   };
   getUsersFares = async (userId: string) => {
@@ -107,7 +108,8 @@ class FareRepository {
           path: "owners",
         },
       })
-      .populate(["faredBy"]);
+      .populate(["faredBy"])
+      .sort({ timestamp: -1 });
     return fares;
   };
   getBusFares = async (busId: string) => {
@@ -137,7 +139,8 @@ class FareRepository {
           path: "owners",
         },
       })
-      .populate(["faredBy"]);
+      .populate(["faredBy"])
+      .sort({ timestamp: -1 });
     return fares;
   };
   approveFareById = async (id: string): Promise<fareType> => {

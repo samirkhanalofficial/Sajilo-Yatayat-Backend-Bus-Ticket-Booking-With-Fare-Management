@@ -68,7 +68,34 @@ class BusRepository {
     }).populate("owners");
     return updatedBus;
   };
-
+  increasebalance = async (busId: string, amount: number) => {
+    const bus = await Bus.findByIdAndUpdate(
+      busId,
+      {
+        $inc: {
+          balance: amount,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+    return bus;
+  };
+  decreasebalance = async (busId: string, amount: number) => {
+    const bus = await Bus.findByIdAndUpdate(
+      busId,
+      {
+        $inc: {
+          balance: -amount,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+    return bus;
+  };
   deleteBusById = async (busId: string) => {
     const bus = await Bus.findByIdAndDelete(busId).populate("owners");
     return bus;

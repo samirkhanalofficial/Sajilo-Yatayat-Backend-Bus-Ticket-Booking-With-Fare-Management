@@ -40,19 +40,20 @@ class DepartureRepository {
     return updatedDeparture;
   };
 
-  getAllDeparture = async (): Promise<departureType[]> => {
-    const departures: departureType[] = await Departure.find()
+  getAllDeparture = async () => {
+    const departures = await Departure.find()
       .populate({
         path: "bus",
         populate: {
           path: "owners",
         },
       })
-      .populate(["from", "to"]);
+      .populate(["from", "to"])
+      .sort({ timestamp: -1 });
     return departures;
   };
-  getDepartureByBusId = async (busId: string): Promise<departureType[]> => {
-    const departures: departureType[] = await Departure.find()
+  getDepartureByBusId = async (busId: string) => {
+    const departures = await Departure.find()
       .where({
         bus: busId,
       })
@@ -62,15 +63,12 @@ class DepartureRepository {
           path: "owners",
         },
       })
-      .populate(["from", "to"]);
+      .populate(["from", "to"])
+      .sort({ timestamp: -1 });
     return departures;
   };
-  getDepartures = async (
-    from: string,
-    to: string,
-    date: string
-  ): Promise<departureType[]> => {
-    const departures: departureType[] = await Departure.find()
+  getDepartures = async (from: string, to: string, date: string) => {
+    const departures = await Departure.find()
       .where({
         from,
         to,
@@ -82,7 +80,8 @@ class DepartureRepository {
           path: "owners",
         },
       })
-      .populate(["from", "to"]);
+      .populate(["from", "to"])
+      .sort({ timestamp: -1 });
     return departures;
   };
   deleteDepartureById = async (id: string) => {

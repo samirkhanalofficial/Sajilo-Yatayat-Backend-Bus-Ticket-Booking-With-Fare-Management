@@ -5,8 +5,12 @@ export type createTransactionType = {
   isUser: boolean;
   isIncomming: boolean;
   isDone: boolean;
+  accountName?: string;
+  bankName?: string;
+  bankAccountNumber?: string;
 };
 
 export type transactionType = createTransactionType & {
   id: string;
+  timestamp: Date;
 };

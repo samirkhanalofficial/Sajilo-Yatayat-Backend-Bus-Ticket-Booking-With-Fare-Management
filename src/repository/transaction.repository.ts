@@ -5,7 +5,7 @@ class TransactionRepository {
   constructor() {}
 
   addTransaction = async (dataToSave: createTransactionType) => {
-    const transactionData = new Transaction(dataToSave);
+    const transactionData = new Transaction({ ...dataToSave });
     await transactionData.save();
     return transactionData;
   };
@@ -13,7 +13,7 @@ class TransactionRepository {
     const transactions = Transaction.find({
       who: userId,
       isUser,
-    });
+    }).sort({ timestamp: -1 });
 
     return transactions;
   };

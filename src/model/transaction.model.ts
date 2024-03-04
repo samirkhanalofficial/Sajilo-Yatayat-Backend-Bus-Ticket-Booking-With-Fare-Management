@@ -8,6 +8,14 @@ const transactionSchema = new mongoose.Schema<transactionType>({
   isUser: { type: Boolean, default: false },
   isIncomming: { type: Boolean, default: false },
   isDone: { type: Boolean, default: false },
+  accountName: { type: String, required: false },
+  bankName: { type: String, required: false },
+  bankAccountNumber: { type: String, required: false },
+  timestamp: {
+    type: Date,
+    required: true,
+    default: new Date(),
+  },
 });
 
 const Transaction =

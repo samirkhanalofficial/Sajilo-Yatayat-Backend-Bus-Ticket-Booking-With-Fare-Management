@@ -8,6 +8,7 @@ import {
 } from "../validation/khalti-validation";
 import { fareRepository } from "../repository/fare.repository";
 import { transactionRepository } from "../repository/transaction.repository";
+import { busRepository } from "../repository/bus.repository";
 
 const khaltiRouter = express.Router();
 // init payment
@@ -116,6 +117,7 @@ khaltiRouter.post("/verify", async (req: AuthUserRequest, res: Response) => {
       isIncomming: true,
       isDone: true,
     });
+    await busRepository.increasebalance(setpaid.bus.id, setpaid.amount);
     if (!addTransactionForUser) throw "error updating user transaction";
     if (!addTransactionForBus) throw "error updating bus transaction";
 
