@@ -12,6 +12,7 @@ import departureRouter from "./src/routes/departure.routes";
 import fareRouter from "./src/routes/fare.routes";
 import locationRouter from "./src/routes/location.routes";
 import { khaltiRouter } from "./src/routes/khalti.routes";
+import transactionRouter from "./src/routes/transaction.routes";
 initializeFirebaseApp();
 const port = process.env.PORT || 3000;
 try {
@@ -34,6 +35,7 @@ app.use("/departure", departureRouter);
 app.use("/fare", fareRouter);
 app.use("/location", locationRouter);
 app.use("/pay/khalti", khaltiRouter);
+app.use("/transactions", transactionRouter);
 
 // app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 //   console.log(err);

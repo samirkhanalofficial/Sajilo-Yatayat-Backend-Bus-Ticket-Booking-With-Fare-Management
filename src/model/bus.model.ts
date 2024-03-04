@@ -13,6 +13,7 @@ const busSchema = new mongoose.Schema<busType>({
   leftSeats: { type: Number, required: true },
   rightSeats: { type: Number, required: true },
   lastSeats: { type: Number, required: true },
+  balance: { type: Number, required: false, default: 0 },
   features: {
     type: [String],
     enum: Object.values(BUSFEATURES),

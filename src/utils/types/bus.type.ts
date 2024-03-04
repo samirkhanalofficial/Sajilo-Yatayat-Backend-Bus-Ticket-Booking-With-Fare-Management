@@ -10,6 +10,7 @@ export type createBusType = {
   leftSeats: number;
   rightSeats: number;
   lastSeats: number;
+  balance: number;
   features: BUSFEATURES[];
 };
 export type busType = createBusType & {

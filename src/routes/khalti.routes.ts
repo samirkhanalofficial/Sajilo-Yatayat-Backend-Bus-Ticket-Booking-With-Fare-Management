@@ -7,6 +7,7 @@ import {
   VerifyKhaltiPayment,
 } from "../validation/khalti-validation";
 import { fareRepository } from "../repository/fare.repository";
+import { transactionRepository } from "../repository/transaction.repository";
 
 const khaltiRouter = express.Router();
 // init payment
@@ -96,9 +97,28 @@ khaltiRouter.post("/verify", async (req: AuthUserRequest, res: Response) => {
     const updateKhalti = await khaltiRepository.updateKhaltiData(
       khaltiData._id
     );
+    if (!updateKhalti) throw "error updating khaltiData";
     const setpaid = await fareRepository.payFareById(khaltiData.fare);
     if (!setpaid) throw "error updating to Paid status";
-    if (!updateKhalti) throw "error updating khaltiData";
+    const addTransactionForUser = await transactionRepository.addTransaction({
+      amount: setpaid.amount,
+      isUser: true,
+      method: "Khalti Payment Gateway",
+      who: setpaid.faredBy.id,
+      isIncomming: false,
+      isDone: true,
+    });
+    const addTransactionForBus = await transactionRepository.addTransaction({
+      amount: setpaid.amount,
+      isUser: false,
+      method: "Khalti Payment Gateway",
+      who: setpaid.bus.id,
+      isIncomming: true,
+      isDone: true,
+    });
+    if (!addTransactionForUser) throw "error updating user transaction";
+    if (!addTransactionForBus) throw "error updating bus transaction";
+
     return res.status(200).json(data);
   } catch (e: any) {
     return res.status(400).json({ message: e.toString() });
