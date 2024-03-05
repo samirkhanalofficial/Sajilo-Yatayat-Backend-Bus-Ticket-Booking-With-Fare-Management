@@ -5,7 +5,6 @@ import Joi from "joi";
 import { busRepository } from "../repository/bus.repository";
 const transactionRouter = express.Router();
 import admin from "firebase-admin";
-const messenging = admin.messaging();
 transactionRouter.post(
   "/withdraw/",
   async (req: AuthUserRequest, res: Response) => {
@@ -39,6 +38,8 @@ transactionRouter.post(
       });
       if (!transaction) throw "Error withdrawing";
       await busRepository.decreasebalance(value.busId, bus.balance);
+      const messenging = admin.messaging();
+
       await messenging.send({
         topic: bus.id,
         notification: {

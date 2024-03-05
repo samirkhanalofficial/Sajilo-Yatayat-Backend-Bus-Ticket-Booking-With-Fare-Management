@@ -10,7 +10,6 @@ import { fareRepository } from "../repository/fare.repository";
 import { transactionRepository } from "../repository/transaction.repository";
 import { busRepository } from "../repository/bus.repository";
 import admin from "firebase-admin";
-const messenging = admin.messaging();
 const khaltiRouter = express.Router();
 // init payment
 khaltiRouter.post(
@@ -121,6 +120,8 @@ khaltiRouter.post("/verify", async (req: AuthUserRequest, res: Response) => {
     await busRepository.increasebalance(setpaid.bus.id, setpaid.amount);
     if (!addTransactionForUser) throw "error updating user transaction";
     if (!addTransactionForBus) throw "error updating bus transaction";
+    const messenging = admin.messaging();
+
     await messenging.send({
       topic: setpaid.bus.id,
       notification: {

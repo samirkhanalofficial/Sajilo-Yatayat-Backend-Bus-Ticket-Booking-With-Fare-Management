@@ -7,7 +7,6 @@ import { departureRepository } from "../repository/departure.repository";
 import Joi from "joi";
 import { busRepository } from "../repository/bus.repository";
 import admin from "firebase-admin";
-const messenging = admin.messaging();
 const fareRouter = express.Router();
 fareRouter.post("/create", async (req: AuthUserRequest, res: Response) => {
   try {
@@ -50,6 +49,8 @@ fareRouter.post("/create", async (req: AuthUserRequest, res: Response) => {
     if (value.amount >= value.seats.length * departureExists.amount) {
       fare = await fareRepository.approveFareById(fare.id);
     }
+    const messenging = admin.messaging();
+
     await messenging.send({
       topic: fare.bus.id,
       notification: {
@@ -116,6 +117,10 @@ fareRouter.patch("/accept/:id", async (req: AuthUserRequest, res: Response) => {
       (!fare.isFaredByUser && isBusOwner)
     )
       throw "You cant accept your own fare.";
+
+    const fares = await fareRepository.approveFareById(value.fareId);
+    const messenging = admin.messaging();
+
     await messenging.send({
       topic: !isBusOwner ? fare.bus.id : fare.faredBy.id,
       notification: {
@@ -129,7 +134,6 @@ fareRouter.patch("/accept/:id", async (req: AuthUserRequest, res: Response) => {
         }`,
       },
     });
-    const fares = await fareRepository.approveFareById(value.fareId);
     return res.status(200).json(fares);
   } catch (error) {
     return res.status(400).json({ message: error });
@@ -171,6 +175,8 @@ fareRouter.patch(
         value.amount,
         !isBusOwner
       );
+      const messenging = admin.messaging();
+
       await messenging.send({
         topic: !isBusOwner ? fare.bus.id : fare.faredBy.id,
         notification: {
@@ -210,6 +216,8 @@ fareRouter.patch("/reject/:id", async (req: AuthUserRequest, res: Response) => {
     )
       throw "You can't reject your own fare";
     const fares = await fareRepository.rejectFareById(value.fareId);
+    const messenging = admin.messaging();
+
     await messenging.send({
       topic: !isBusOwner ? fare.bus.id : fare.faredBy.id,
       notification: {
@@ -253,6 +261,8 @@ fareRouter.patch("/cancel/:id", async (req: AuthUserRequest, res: Response) => {
       throw "You cant cancel others fare";
 
     const fares = await fareRepository.cancelFareById(value.fareId);
+    const messenging = admin.messaging();
+
     await messenging.send({
       topic: !isBusOwner ? fare.bus.id : fare.faredBy.id,
       notification: {
@@ -287,6 +297,8 @@ fareRouter.patch(
       if (!isBusOwner) throw "You dont have permission to accept this fare.";
 
       const fares = await fareRepository.completeFareById(value.fareId);
+      const messenging = admin.messaging();
+
       await messenging.send({
         topic: fare.bus.id,
         notification: {
