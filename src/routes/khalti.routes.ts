@@ -9,7 +9,8 @@ import {
 import { fareRepository } from "../repository/fare.repository";
 import { transactionRepository } from "../repository/transaction.repository";
 import { busRepository } from "../repository/bus.repository";
-
+import admin from "firebase-admin";
+const messenging = admin.messaging();
 const khaltiRouter = express.Router();
 // init payment
 khaltiRouter.post(
@@ -120,7 +121,20 @@ khaltiRouter.post("/verify", async (req: AuthUserRequest, res: Response) => {
     await busRepository.increasebalance(setpaid.bus.id, setpaid.amount);
     if (!addTransactionForUser) throw "error updating user transaction";
     if (!addTransactionForBus) throw "error updating bus transaction";
-
+    await messenging.send({
+      topic: setpaid.bus.id,
+      notification: {
+        title: `Amount Received @ Rs ${setpaid.amount}`,
+        body: `${setpaid.bus.busnumber}  : (${setpaid.departure.from.name} - ${setpaid.departure.to.name}, Thank you for using our service`,
+      },
+    });
+    await messenging.send({
+      topic: setpaid.faredBy.id,
+      notification: {
+        title: `Amount Paid @ Rs ${setpaid.amount}`,
+        body: `${setpaid.bus.busnumber}  : (${setpaid.departure.from.name} - ${setpaid.departure.to.name}, Thank you for using our service`,
+      },
+    });
     return res.status(200).json(data);
   } catch (e: any) {
     return res.status(400).json({ message: e.toString() });

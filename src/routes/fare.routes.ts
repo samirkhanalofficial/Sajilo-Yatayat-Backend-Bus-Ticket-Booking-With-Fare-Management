@@ -7,6 +7,7 @@ import { departureRepository } from "../repository/departure.repository";
 import Joi from "joi";
 import { busRepository } from "../repository/bus.repository";
 import admin from "firebase-admin";
+const messenging = admin.messaging();
 const fareRouter = express.Router();
 fareRouter.post("/create", async (req: AuthUserRequest, res: Response) => {
   try {
@@ -49,19 +50,11 @@ fareRouter.post("/create", async (req: AuthUserRequest, res: Response) => {
     if (value.amount >= value.seats.length * departureExists.amount) {
       fare = await fareRepository.approveFareById(fare.id);
     }
-    const messenging = admin.messaging();
     await messenging.send({
       topic: fare.bus.id,
       notification: {
-        title: "New Fare Request",
-        body: `${fare.faredBy.name} fared for your bus, please check it out as soon as possible.`,
-      },
-    });
-    await messenging.send({
-      topic: fare.faredBy.id,
-      notification: {
-        title: "New Fare Request",
-        body: `${fare.faredBy.name} fared for your bus, please check it out as soon as possible.`,
+        title: `New Fare Request @ Rs ${fare.amount}`,
+        body: `${fare.bus.busnumber}  : (${fare.departure.from.name} - ${fare.departure.to.name}, please check it out as soon as possible.`,
       },
     });
 
@@ -123,7 +116,19 @@ fareRouter.patch("/accept/:id", async (req: AuthUserRequest, res: Response) => {
       (!fare.isFaredByUser && isBusOwner)
     )
       throw "You cant accept your own fare.";
-
+    await messenging.send({
+      topic: !isBusOwner ? fare.bus.id : fare.faredBy.id,
+      notification: {
+        title: `Fare Accepted @ Rs ${fare.amount}`,
+        body: `${fare.bus.busnumber}  : (${fare.departure.from.name} - ${
+          fare.departure.to.name
+        }, ${
+          !isBusOwner
+            ? "please check it out as soon as possible."
+            : "please pay faster to avoid getting cancelled."
+        }`,
+      },
+    });
     const fares = await fareRepository.approveFareById(value.fareId);
     return res.status(200).json(fares);
   } catch (error) {
@@ -166,6 +171,13 @@ fareRouter.patch(
         value.amount,
         !isBusOwner
       );
+      await messenging.send({
+        topic: !isBusOwner ? fare.bus.id : fare.faredBy.id,
+        notification: {
+          title: `Fare Modified @ Rs ${fare.amount}`,
+          body: `${fare.bus.busnumber}  : (${fare.departure.from.name} - ${fare.departure.to.name}, please check it out as soon as possible.`,
+        },
+      });
       return res.status(200).json(fares);
     } catch (error) {
       return res.status(400).json({ message: error });
@@ -198,6 +210,14 @@ fareRouter.patch("/reject/:id", async (req: AuthUserRequest, res: Response) => {
     )
       throw "You can't reject your own fare";
     const fares = await fareRepository.rejectFareById(value.fareId);
+    await messenging.send({
+      topic: !isBusOwner ? fare.bus.id : fare.faredBy.id,
+      notification: {
+        title: `Fare rejected @ Rs ${fare.amount}`,
+        body: `${fare.bus.busnumber}  : (${fare.departure.from.name} - ${fare.departure.to.name}, we are really sorry for this."
+        }`,
+      },
+    });
     return res.status(200).json(fares);
   } catch (error) {
     return res.status(400).json({ message: error });
@@ -233,6 +253,13 @@ fareRouter.patch("/cancel/:id", async (req: AuthUserRequest, res: Response) => {
       throw "You cant cancel others fare";
 
     const fares = await fareRepository.cancelFareById(value.fareId);
+    await messenging.send({
+      topic: !isBusOwner ? fare.bus.id : fare.faredBy.id,
+      notification: {
+        title: `Fare Cancelled @ Rs ${fare.amount}`,
+        body: `${fare.bus.busnumber}  : (${fare.departure.from.name} - ${fare.departure.to.name}, we are sorry to inform you that the fare has been cancelled.`,
+      },
+    });
     return res.status(200).json(fares);
   } catch (error) {
     return res.status(400).json({ message: error });
@@ -260,6 +287,20 @@ fareRouter.patch(
       if (!isBusOwner) throw "You dont have permission to accept this fare.";
 
       const fares = await fareRepository.completeFareById(value.fareId);
+      await messenging.send({
+        topic: fare.bus.id,
+        notification: {
+          title: `Fare Completed @ Rs ${fare.amount}`,
+          body: `${fare.bus.busnumber}  : (${fare.departure.from.name} - ${fare.departure.to.name}, Thank you for using our service`,
+        },
+      });
+      await messenging.send({
+        topic: fare.faredBy.id,
+        notification: {
+          title: `Fare Completed @ Rs ${fare.amount}`,
+          body: `${fare.bus.busnumber}  : (${fare.departure.from.name} - ${fare.departure.to.name}, Thank you for using our service`,
+        },
+      });
       return res.status(200).json(fares);
     } catch (error) {
       return res.status(400).json({ message: error });
