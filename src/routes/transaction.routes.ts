@@ -43,7 +43,7 @@ transactionRouter.post(
         topic: bus.id,
         notification: {
           title: `Amount Withdraw Request Received @ Rs ${bus.balance}`,
-          body: `${bus.busnumber} : ${req.user?.name}  `,
+          body: `${bus.busnumber} by ${req.user?.name}`,
         },
       });
       return res.status(200).json(transaction);
