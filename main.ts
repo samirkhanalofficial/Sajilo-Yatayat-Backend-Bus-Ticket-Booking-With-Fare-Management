@@ -44,6 +44,16 @@ app.use("/transactions", transactionRouter);
 // });
 // app.use("/khalti", khaltiRouter);
 
+// app.get("/notify",(){
+//   const messenging = admin.messaging();
+//   messenging.send({
+//     topic: fare.bus.id,
+//     notification: {
+//       title: "New Fare Request",
+//       body: `${fare.faredBy.name} fared for your bus, please check it out as soon as possible.`,
+//     },
+//   });
+// })
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });

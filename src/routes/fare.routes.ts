@@ -6,7 +6,7 @@ import { FARESTATUS } from "../utils/enums/departure-status.enum";
 import { departureRepository } from "../repository/departure.repository";
 import Joi from "joi";
 import { busRepository } from "../repository/bus.repository";
-
+import admin from "firebase-admin";
 const fareRouter = express.Router();
 fareRouter.post("/create", async (req: AuthUserRequest, res: Response) => {
   try {
@@ -49,6 +49,22 @@ fareRouter.post("/create", async (req: AuthUserRequest, res: Response) => {
     if (value.amount >= value.seats.length * departureExists.amount) {
       fare = await fareRepository.approveFareById(fare.id);
     }
+    const messenging = admin.messaging();
+    await messenging.send({
+      topic: fare.bus.id,
+      notification: {
+        title: "New Fare Request",
+        body: `${fare.faredBy.name} fared for your bus, please check it out as soon as possible.`,
+      },
+    });
+    await messenging.send({
+      topic: fare.faredBy.id,
+      notification: {
+        title: "New Fare Request",
+        body: `${fare.faredBy.name} fared for your bus, please check it out as soon as possible.`,
+      },
+    });
+
     return res.status(201).json(fare);
   } catch (error) {
     console.log(error);
