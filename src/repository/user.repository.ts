@@ -5,7 +5,7 @@ class UserRepository {
   constructor() {}
 
   addUser = async (user: createUserType): Promise<userType> => {
-    const adminData = new User(user);
+    const adminData = new User({ ...user, timestamp: new Date() });
     await adminData.save();
     return adminData;
   };

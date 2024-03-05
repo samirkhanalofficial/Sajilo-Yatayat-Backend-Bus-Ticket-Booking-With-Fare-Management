@@ -6,7 +6,7 @@ class FareRepository {
   constructor() {}
 
   createFare = async (fareDetails: createFareType): Promise<fareType> => {
-    const fare = new Fare(fareDetails);
+    const fare = new Fare({ ...fareDetails, timestamp: new Date() });
     await fare.save();
     return this.getFareById(fare.id);
   };

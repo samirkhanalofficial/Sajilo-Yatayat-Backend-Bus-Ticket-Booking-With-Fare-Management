@@ -110,7 +110,7 @@ fareRouter.patch("/accept/:id", async (req: AuthUserRequest, res: Response) => {
       throw `fares that are ${fare.status} cannot be approved.`;
 
     // restrict other than bus owner & farerer
-    if (fare.faredBy.id != req.user!.id || !isBusOwner)
+    if (fare.faredBy.id != req.user!.id && !isBusOwner)
       throw "You dont have permission to accept this fare.";
     if (
       (fare.isFaredByUser && !isBusOwner) ||
@@ -163,8 +163,8 @@ fareRouter.patch(
         throw `fares that are ${fare.status} cannot be approved.`;
 
       // restrict other than bus owner & farerer
-      if (fare.faredBy.id != req.user!.id || !isBusOwner)
-        throw "You dont have permission to accept this fare.";
+      if (fare.faredBy.id != req.user!.id && !isBusOwner)
+        throw "You dont have permission to change this fare.";
       if (
         (fare.isFaredByUser && !isBusOwner) ||
         (!fare.isFaredByUser && isBusOwner)
@@ -206,10 +206,10 @@ fareRouter.patch("/reject/:id", async (req: AuthUserRequest, res: Response) => {
       req.user!.id
     );
     if (fare.status !== FARESTATUS.PENDING)
-      throw `fares that are ${fare.status} cannot be cancelled.`;
+      throw `fares that are ${fare.status} cannot be rejected.`;
     // restrict other than bus owner & farerer
-    if (fare.faredBy.id != req.user!.id || !isBusOwner)
-      throw "You dont have permission to cancel this fare.";
+    if (fare.faredBy.id != req.user!.id && !isBusOwner)
+      throw "You dont have permission to reject this fare.";
     if (
       (fare.isFaredByUser && !isBusOwner) ||
       (!fare.isFaredByUser && isBusOwner)
@@ -251,14 +251,8 @@ fareRouter.patch("/cancel/:id", async (req: AuthUserRequest, res: Response) => {
     )
       throw `fares that are ${fare.status} cannot be cancelled.`;
     // restrict other than bus owner & farerer
-    if (fare.faredBy.id != req.user!.id || !isBusOwner)
+    if (fare.faredBy.id != req.user!.id && !isBusOwner)
       throw "You dont have permission to cancel this fare.";
-
-    if (
-      (fare.isFaredByUser && isBusOwner) ||
-      (!fare.isFaredByUser && !isBusOwner)
-    )
-      throw "You cant cancel others fare";
 
     const fares = await fareRepository.cancelFareById(value.fareId);
     const messenging = admin.messaging();

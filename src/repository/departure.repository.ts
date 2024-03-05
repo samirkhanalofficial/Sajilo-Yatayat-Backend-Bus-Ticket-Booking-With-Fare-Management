@@ -8,7 +8,10 @@ class DepartureRepository {
   addDeparture = async (
     departure: createDepartureType
   ): Promise<departureType> => {
-    const departureData = new Departure(departure);
+    const departureData = new Departure({
+      ...departure,
+      timestamp: new Date(),
+    });
     await departureData.save();
     return this.getDepartureById(departureData.id);
   };

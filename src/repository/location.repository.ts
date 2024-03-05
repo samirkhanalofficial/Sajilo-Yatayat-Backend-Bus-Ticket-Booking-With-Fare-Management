@@ -6,7 +6,7 @@ class LocationRepository {
   addLocation = async (
     locationDetail: createLocationType
   ): Promise<locationType> => {
-    const location = new Location(locationDetail);
+    const location = new Location({ ...locationDetail, timestamp: new Date() });
     await location.save();
     return location;
   };

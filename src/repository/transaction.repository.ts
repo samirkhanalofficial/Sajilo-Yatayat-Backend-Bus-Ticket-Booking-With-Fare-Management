@@ -5,7 +5,10 @@ class TransactionRepository {
   constructor() {}
 
   addTransaction = async (dataToSave: createTransactionType) => {
-    const transactionData = new Transaction({ ...dataToSave });
+    const transactionData = new Transaction({
+      ...dataToSave,
+      timestamp: new Date(),
+    });
     await transactionData.save();
     return transactionData;
   };
