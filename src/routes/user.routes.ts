@@ -8,8 +8,7 @@ userRouter.post("/create", async (req: AuthUserRequest, res: Response) => {
   try {
     const { error, value } = createUserValidation.validate(req.body);
     if (error) throw error.message;
-    // TODO : check if user already exists
-    // if (req.user) throw "User already exists.";
+    if (req.user) throw "User already exists.";
     const user = await userRepository.addUser({
       ...value,
       mobile: req.phone_number!,
@@ -27,5 +26,17 @@ userRouter.get("/mydetails", async (req: AuthUserRequest, res: Response) => {
     return res.status(400).json({ message: error });
   }
 });
+userRouter.get(
+  "/delete-account",
+  async (req: AuthUserRequest, res: Response) => {
+    try {
+      if (!req.user) throw "User does not exists.";
+      const deletedUser = await userRepository.deleteUserById(req.user.id);
+      return res.status(200).json(deletedUser);
+    } catch (error: any) {
+      return res.status(400).json({ message: error });
+    }
+  }
+);
 
 export default userRouter;

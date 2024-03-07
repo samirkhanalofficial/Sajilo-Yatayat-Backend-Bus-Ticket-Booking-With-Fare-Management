@@ -14,11 +14,11 @@ class UserRepository {
     return user;
   };
   getUserByPhone = async (mobile: string): Promise<userType> => {
-    const user = await User.findOne({ mobile });
+    const user = await User.findOne({ mobile, isDeleted: false });
     return user;
   };
   getAllUser = async (): Promise<userType[]> => {
-    const user = await User.find();
+    const user = await User.find({ isDeleted: false });
     return user;
   };
 
@@ -33,7 +33,15 @@ class UserRepository {
   };
 
   deleteUserById = async (userId: string) => {
-    const user = await User.findByIdAndDelete(userId);
+    const user = await User.findByIdAndUpdate(
+      userId,
+      {
+        isDeleted: true,
+      },
+      {
+        new: true,
+      }
+    );
     return user;
   };
 }

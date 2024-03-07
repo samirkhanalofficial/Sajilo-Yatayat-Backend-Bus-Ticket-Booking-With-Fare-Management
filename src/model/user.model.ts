@@ -12,6 +12,11 @@ const userSchema = new mongoose.Schema<userType>({
     required: true,
     default: new Date(),
   },
+  isDeleted: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
 });
 
 const User = mongoose.models.User || mongoose.model("User", userSchema);

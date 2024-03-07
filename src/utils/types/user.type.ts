@@ -8,4 +8,5 @@ export type createUserType = {
 export type userType = createUserType & {
   id: string;
   timestamp: Date;
+  isDeleted: boolean;
 };
