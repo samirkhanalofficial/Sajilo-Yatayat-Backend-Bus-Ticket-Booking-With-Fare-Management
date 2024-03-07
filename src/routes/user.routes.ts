@@ -26,7 +26,7 @@ userRouter.get("/mydetails", async (req: AuthUserRequest, res: Response) => {
     return res.status(400).json({ message: error });
   }
 });
-userRouter.get(
+userRouter.delete(
   "/delete-account",
   async (req: AuthUserRequest, res: Response) => {
     try {
