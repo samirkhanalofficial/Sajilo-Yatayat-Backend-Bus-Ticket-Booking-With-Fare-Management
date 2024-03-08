@@ -44,7 +44,11 @@ class FareRepository {
     const acceptedSeats = await Fare.find(
       {
         departure: departureId,
-        $or: [{ status: FARESTATUS.ACCEPTED }, { status: FARESTATUS.PAID }],
+        $or: [
+          { status: FARESTATUS.ACCEPTED },
+          { status: FARESTATUS.PAID },
+          { status: FARESTATUS.COMPLETED },
+        ],
       },
       { seats: 1, _id: 0 }
     );
