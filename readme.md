@@ -48,7 +48,7 @@ Sajilo Yatayat is cross platform app developed with flutter that lets you book b
 
 **Note** : Create your `/firebase.json` file and put the firebase credientials & for `khalti` credientials, change them in `.env` file
 
-Demo Deployed Url : https://sajiloyatayatbackend.samirk.com.np
+Demo Deployed Url : https://sajiloyatayatbackend.samirk.com.np <br/>
 Demo App Link : https://play.google.com/store/apps/details?id=com.sajiloyatayat&hl=en
 ### Project Maintained By
 
