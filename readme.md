@@ -1,12 +1,12 @@
 # Sajilo Yatayat
 
-Sajilo Yatayat is a online bus ticket booking app, that let's user send fare for ticket booking. It even let's you pay offline (One party needs to be online.).
+## Introduction
+
+Sajilo Yatayat is cross platform app developed with flutter that lets you book bus tickets. It allows multi-seat booking, payment with khalti and has faring functionality. Faring basically allows travellers to ask the ticket for lower price which when accepted by the bus owner, the ticket price can be paid and booked. It is a mvp product developed for minor project of college project. It depends on firebase (you need to set it up). The frontend for this project is an app, and the repo link is mentioned below.
+ - Frontend : <a href="https://github.com/samirkhanalofficial/Sajilo-Yatayat-Flutter-Bus-Ticket-Booking-With-Fare-Management">Repo Link</a>
+
 
 ## Getting Started
-
-### About This Project
-
-This project is for handeling backend service of the project. Please refer to [Sajilo Yatayat Flutter](https://github.com/samirkhanal077/sajilo-yatayat-flutter) for flutter project.
 
 ### How To setup
 
@@ -46,17 +46,13 @@ This project is for handeling backend service of the project. Please refer to [S
    npm start
    ```
 
-**Note** : Create your `firebase.json` file in `src/service/firebase.json` & for `khalti` credientials, change them in `.env` file
+**Note** : Create your `/firebase.json` file and put the firebase credientials & for `khalti` credientials, change them in `.env` file
 
 Demo Deployed Url : https://sajiloyatayatbackend.samirk.com.np
-
+Demo App Link : https://play.google.com/store/apps/details?id=com.sajiloyatayat&hl=en
 ### Project Maintained By
 
 - Samir Khanal
-
-### License
-
-This project is copyrighted to only the participants of the minor project of Kathford Engineering College. i.e. Only these member have right to use this project for commercial use.
 
 #### Members
 
